@@ -63,3 +63,11 @@ curl -v -H "Host: helloworld-go.default.example.com" 172.18.0.2
 # Resonse:
 Hello Hello Knative Serving is up and running with Kourier!!!
 ```
+
+* or, add host to /etc/hosts and call the service:
+
+```bash
+curl -v helloworld-go.default.example.com
+```
+
+

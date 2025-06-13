@@ -1,6 +1,6 @@
 # Install knative on k3d
 
-Follow the [installation documentation](https://knative.dev/docs/install/operator/knative-with-operators/) to install knative  operator using helm.
+
 
 * Install k3d local first
 
@@ -68,4 +68,6 @@ Hello Hello Knative Serving is up and running with Kourier!!!
 curl -v helloworld-go.default.example.com
 ```
 
+## Resources
 
+* knative [installation documentation](https://knative.dev/docs/install/operator/knative-with-operators/) to install knative operator using helm.

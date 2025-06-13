@@ -1,34 +1,32 @@
-# Install knative serving cluster
+# Install knative on k3d
 
-* Install k3d local
+Follow the [installation documentation](https://knative.dev/docs/install/operator/knative-with-operators/) to install knative  operator using helm.
+
+* Install k3d local first
 
 ```bash
-# disable traefik, add registry
-k3d cluster create knative -p "80:80@loadbalancer" --registry-create dev.local --k3s-arg="--disable=traefik@server:0" --kubeconfig-update-default --api-port 6550
+# disable traefik
+k3d cluster create knative -p "80:80@loadbalancer" --k3s-arg="--disable=traefik@server:0" --kubeconfig-update-default
 ```
 
-* Apply crd's
+
+* Installing the operator
 ```bash
-kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.18.0/serving-crds.yaml
+helm repo add knative-operator https://knative.github.io/operator
+helm install knative-operator --create-namespace --namespace knative-operator knative-operator/knative-operator
 ```
 
-* Apply core serving
-```bash
-kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.18.0/serving-core.yaml
-```
+* Create the Serving custom resource with `kourier` networking layer
 
-* Apply kourier 
 ```bash
-kubectl apply -f https://github.com/knative/net-kourier/releases/download/knative-v1.18.0/kourier.yaml
+kubectl apply -f kn-serving-kourier.yaml
 
-# configure serving
-kubectl patch configmap/config-network \
-  --namespace knative-serving \
-  --type merge \
-  --patch '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
+namespace/knative-serving created
+knativeserving.operator.knative.dev/knative-serving created
 ```
 
 * Fetch external IP
+
 ```bash
 kubectl --namespace kourier-system get service kourier
 
